@@ -731,7 +731,7 @@ Range.prototype = {
   createBookmark: function (serialize, same) {
     var endNode,
       startNode = document.createElement("span"),
-      startId = "_liepin_bookmark_start_" + (same ? "" : guid);
+      startId = "_jinjj_bookmark_start_" + (same ? "" : guid);
     startNode.style.cssText = "display:none;line-height:0px;";
     // startNode.appendChild(document.createTextNode("\u200D"));
     startNode.appendChild(document.createTextNode(startId));
@@ -739,7 +739,7 @@ Range.prototype = {
     
     
     if (!this.collapsed) {
-      var endId = "_liepin_bookmark_end_" + (same ? "" : guid++);
+      var endId = "_jinjj_bookmark_end_" + (same ? "" : guid++);
       endNode = startNode.cloneNode(true);
       endNode.innerText = endId;
       // endNode.appendChild(document.createTextNode(endId));
