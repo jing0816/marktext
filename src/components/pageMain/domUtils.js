@@ -690,7 +690,9 @@ var domUtils = ({
       } else {
         attrB = nodeB.attributes[attrA.nodeName];
       }
-      if (attrB && (!attrB.specified || attrA.nodeValue != attrB.nodeValue)) {
+      if(!attrB) {
+        return false;
+      } else if (!attrB.specified || attrA.nodeValue != attrB.nodeValue) {
         return false;
       }
     }
