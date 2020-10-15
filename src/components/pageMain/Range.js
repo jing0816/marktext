@@ -1002,15 +1002,16 @@ Range.prototype = {
       }
     }
  
+    this.moveToBookmark(bookmark);
+
     // jing
     callback && callback({
       start: bookmark.startMark,
       end: bookmark.endMark,
       content: bookmark.content,
     });
-    return this.moveToBookmark(bookmark);
   },
-  removeInlineStyle: function (tagNames, className) {
+  removeInlineStyle: function (tagNames, className, callback) {
     if (this.collapsed) return this;
     tagNames = utils.isArray(tagNames) ? tagNames : [tagNames];
     this.shrinkBoundary().adjustmentBoundary();
@@ -1076,7 +1077,15 @@ Range.prototype = {
       }
       current = next;
     }
-    return this.moveToBookmark(bookmark);
+    
+    this.moveToBookmark(bookmark);
+    
+    // jing
+    callback && callback({
+      start: bookmark.startMark,
+      end: bookmark.endMark,
+      content: bookmark.content,
+    });
   },
   getClosedNode: function () {
     var node;
