@@ -105,18 +105,10 @@ class PageMain extends React.Component {
                 end: end2,
                 content: document.getElementById('wrap').textContent.substring(start2, end2),
               });
-            } else if(endInclude) { //选中的结束在队列的数组内，开始不在
-              start1 = data.end;
-              end1 = arr[endIndex].end;
-              arr.splice(startIndex, endIndex-startIndex+1, {
-                start: start1,
-                end: end1,
-                content: document.getElementById('wrap').textContent.substring(start1, end1),
-              });
-            } else if(startInclude) { //选中的开始在队列的数组内，结束不在
-              start1 = arr[startIndex].start;
-              end1 = data.start;
-              arr.splice(startIndex, endIndex-startIndex, {
+            } else if(startInclude || endInclude) { //选中的开始在队列的数组内，结束不在;选中的结束在队列的数组内，开始不在
+              start1 = startInclude ? arr[startIndex].start : data.end;
+              end1 = startInclude? data.start : arr[endIndex].end;
+              arr.splice(startIndex, startInclude? endIndex-startIndex : endIndex-startIndex+1, {
                 start: start1,
                 end: end1,
                 content: document.getElementById('wrap').textContent.substring(start1, end1),
