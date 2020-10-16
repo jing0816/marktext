@@ -1152,10 +1152,16 @@ Range.prototype = {
         }
       }
       this.moveToBookmark(bookmark);
+
       tmp && domUtils.remove(tmp);
       //IE在隐藏状态下不支持range操作，catch一下
       try {
         nativeRange.select();
+        
+        //jing
+        setTimeout(() => {
+          document.selection.empty();
+        });
       } catch (e) { }
       return this;
     }
