@@ -1003,8 +1003,11 @@ Range.prototype = {
     }
  
     this.moveToBookmark(bookmark);
-
+    
     // jing
+    setTimeout(() => {
+      window.getSelection().removeAllRanges();
+    });
     callback && callback({
       start: bookmark.startMark,
       end: bookmark.endMark,
@@ -1079,8 +1082,11 @@ Range.prototype = {
     }
     
     this.moveToBookmark(bookmark);
-    
+
     // jing
+    setTimeout(() => {
+      window.getSelection().removeAllRanges();
+    });
     callback && callback({
       start: bookmark.startMark,
       end: bookmark.endMark,
