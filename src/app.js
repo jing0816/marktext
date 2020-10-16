@@ -9,7 +9,7 @@ function Loading() {
 }
 
 const PageMain = Loadable({
-  loader: () => import('./components/pageMain'),
+  loader: () => import('./components'),
   loading: Loading,
 });
 

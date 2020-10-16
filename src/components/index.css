@@ -1,0 +1,25 @@
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+}
+:global(.custom-underline){
+  border-bottom: 1px solid #f00;
+  font-style: normal;
+}
+:global(.btns a),
+:global(.btns button) {
+  display: inline-block;
+  height: 26px;
+  line-height: 26px;
+  padding: 0 10px;
+  margin-right: 10px;
+  border: 1px solid #f0f;
+  cursor: pointer;
+  color: #333;
+}
+:global(.btns a:hover),
+:global(.btns button) {
+  color: #f0f;
+}

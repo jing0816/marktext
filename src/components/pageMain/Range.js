@@ -1001,7 +1001,7 @@ Range.prototype = {
         current = domUtils.getNextDomNode(current, true, filterFn);
       }
     }
- 
+
     this.moveToBookmark(bookmark);
     
     // jing
