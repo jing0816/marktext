@@ -43,9 +43,10 @@ class MarkText {
       const {include:endInclude, index:endIndex} = this.indexOfArr(data.end, arr);
 
       // console.log(startInclude, startIndex, data.start, endInclude, endIndex, data.end)
-      if(!startInclude && !endInclude && startIndex === 0 && endIndex === 0) { //可在队列头部添加
+
+      if(!startInclude && !endInclude && startIndex === 0 && endIndex === 0) { //选中的头部空白部分
         isAdd && arr.unshift(data);
-      } else if(!startInclude && startIndex === arr.length) { //可在队列尾部添加
+      } else if(!startInclude && startIndex === arr.length) { //选中尾部空白部分
         isAdd && arr.push(data);
       } else if(startInclude && endInclude && startIndex === endIndex) { //选中的范围包含在队列的某个数组内
         if(!isAdd) {
@@ -79,7 +80,7 @@ class MarkText {
             });
           }
         }
-      } else if(!startInclude && !endInclude && startIndex === endIndex) { //可在队列中间插入，无需修改数组
+      } else if(!startInclude && !endInclude && startIndex === endIndex) { //选中中间的空白部分
         isAdd && arr.splice(startIndex, 0, data);
       } else { // 选中的范围在队列的数组内最少包含了1个数组
         if(isAdd) {
@@ -92,11 +93,12 @@ class MarkText {
           });
         } else {
           if(arr[startIndex].end === data.start && arr[startIndex+1].start === data.end) { //正好选中队列两个相邻数组中间的部分
-            //
+          } else if(!startInclude && !endInclude) { //选中的部分完全包含了之前选中的
+            arr.splice(startIndex, endIndex-startIndex+1);
           } else {
             let start1, end1, start2, end2;
 
-            if(startInclude && endInclude) { //选中的开始和结束至少在两个队列的数组内
+            if(startInclude && endInclude) { //选中的部分都在目前被选的范围内
               start1 = arr[startIndex].start;
               end1 = data.start;
               start2 = data.end;
@@ -111,13 +113,17 @@ class MarkText {
                 content: this.wrap.textContent.substring(start2, end2),
               });
             } else if(startInclude || endInclude) { //选中的开始在队列的数组内，结束不在;选中的结束在队列的数组内，开始不在
-              start1 = startInclude ? arr[startIndex].start : data.end;
-              end1 = startInclude? data.start : arr[endIndex].end;
-              arr.splice(startIndex, startInclude? endIndex-startIndex : endIndex-startIndex+1, {
-                start: start1,
-                end: end1,
-                content: this.wrap.textContent.substring(start1, end1),
-              });
+                start1 = startInclude ? arr[startIndex].start : data.end;
+                end1 = startInclude? data.start : arr[endIndex].end;
+                if(start1 === end1) {
+                  arr.splice(startIndex, startInclude? endIndex-startIndex : endIndex-startIndex+1);
+                } else {
+                  arr.splice(startIndex, startInclude? endIndex-startIndex : endIndex-startIndex+1, {
+                    start: start1,
+                    end: end1,
+                    content: this.wrap.textContent.substring(start1, end1),
+                  });
+                }
             }
           }
         }
