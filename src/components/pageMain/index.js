@@ -157,7 +157,7 @@ class MarkText {
       range.removeInlineStyle('i', this.className, (data) => {
         this.addArr(data, false);
       });
-      // range.select();
+      range.select();
     } else {
       alert('请选择标记文字！')
     }
