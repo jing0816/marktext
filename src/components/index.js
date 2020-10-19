@@ -62,6 +62,7 @@ class PageMain extends React.Component {
           <button onClick={() => this.cancleMarkText('shui')}>取消标注</button>
         </div>
         <div>
+          <span>no</span>
           <span onClick={e => this.setMarkTextKey(e, 'shui')}>
             <span className="text-detail-gray">123456腾讯成立于1998年11月，是目前中国<span style={{background: '#f00'}}>最大</span>的互联网综合服务提供商之一，也是中国服务用户最多的互联网企业之一。成立10多年以来，腾讯一直秉承“一切以用户价值为依归”的经营理念，始终处于稳健发展的状态。2004年6月16日，腾讯控股有限公司在香港联交所主板公开上市（股票代号700）。
     通过互联网服务提升人类生活品质是腾讯的使命。目前，腾讯把为用户提供“一站式在线生活服务”作为战略目标，提供互联网增值服务、网络广告服务和电子商务服务。通过即时通信工具<span style={{background: '#f00'}}>QQ</span>、移动社交和通信<span style={{background: '#f00'}}>服务微信和WeChat</span>、门户网站腾讯网（<span style={{background: '#f00'}}>QQ.com</span>）</span>

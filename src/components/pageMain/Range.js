@@ -793,7 +793,8 @@ Range.prototype = {
     return this;
   },
   enlarge: function (toBlock, stopFn) {
-    var isBody = domUtils.isBody,
+    // var isBody = domUtils.isBody, jing
+    var isBody = this.isWrap.bind(this),
       pre,
       node,
       tmp = document.createTextNode("");
@@ -887,7 +888,8 @@ Range.prototype = {
   adjustmentBoundary: function () {
     if (!this.collapsed) {
       while (
-        !domUtils.isBody(this.startContainer) &&
+        // !domUtils.isBody(this.startContainer) && jing
+        !this.isWrap(this.startContainer) &&
         this.startOffset ==
         this.startContainer[
           this.startContainer.nodeType == 3 ? "nodeValue" : "childNodes"
@@ -899,7 +901,8 @@ Range.prototype = {
         this.setStartAfter(this.startContainer);
       }
       while (
-        !domUtils.isBody(this.endContainer) &&
+        // !domUtils.isBody(this.endContainer) && jing
+        !this.isWrap(this.endContainer) &&
         !this.endOffset &&
         this.endContainer[
           this.endContainer.nodeType == 3 ? "nodeValue" : "childNodes"
@@ -1110,6 +1113,13 @@ Range.prototype = {
     }
     return node;
   },
+  /**
+   * 
+   * 判断是否是可选容器，控制范围不要超出边界
+   */
+  isWrap: function(node) {
+    return node && node.nodeType == 1 && node === this.wrap;
+  },
   select: browser.ie
     ? function (noFillData, textRange) {
       var nativeRange;
@@ -1240,7 +1250,7 @@ Range.prototype = {
         sel.addRange(nativeRange);
       }
       return this;
-    }
+    },
 };
 
 export default Range;
