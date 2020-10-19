@@ -1,4 +1,5 @@
 import Range from './Range';
+import domUtils from './domUtils.js'
 
 class MarkText {
   constructor(wrap, className) {
@@ -133,21 +134,95 @@ class MarkText {
     console.log(arr);
   }
 
-  select() {
+
+  select(callback) {
     const range = new Range(this.wrap);
     const sel = window.getSelection();
     
     if (sel && sel.rangeCount) {
       const firstRange = sel.getRangeAt(0);
       const lastRange = sel.getRangeAt(sel.rangeCount - 1);
-      range.setStart(firstRange.startContainer, firstRange.startOffset)
-        .setEnd(lastRange.endContainer, lastRange.endOffset);
-      range.applyInlineStyle('i', {
-        class: this.className
-      }, '', (data) => {
-        this.addArr(data, true);
-      });
-      range.select();
+      
+      const startPosition = domUtils.getPosition(firstRange.startContainer, this.wrap);
+      const endPosition = domUtils.getPosition(lastRange.endContainer, this.wrap);
+
+      if(startPosition === 2 || endPosition === 4) { // 未选中标记范围
+        callback({
+          flag: 0,
+          code: 1,
+          msg: '未选中标记范围',
+        });
+      } else if(startPosition === 10 && endPosition === 10) {
+        callback({
+          flag: 1,
+        });
+        range.setStart(firstRange.startContainer, firstRange.startOffset).setEnd(lastRange.endContainer, lastRange.endOffset);
+        range.applyInlineStyle('i', {
+          class: this.className
+        }, '', (data) => {
+          this.addArr(data, true);
+        });
+        range.select();
+      } else if(startPosition === 4 && endPosition === 10) { // 开始不在标注范围内
+        callback({
+          flag: 0,
+          code: 3,
+          msg: '开始不在标注范围内',
+        });
+      } else if(startPosition === 10 && endPosition === 2) { // 结束不在标注范围内
+        callback({
+          flag: 0,
+          code: 4,
+          msg: '结束不在标注范围内',
+        });
+      } else if(startPosition === 4 && endPosition === 2) { // 开始结束范围超过了标注范围
+        callback({
+          flag: 0,
+          code: 2,
+          msg: '开始结束范围超过了标注范围',
+        });
+      }
+      return;
+
+      // const startfilterNode = domUtils.findParent(firstRange.startContainer, node => {
+      //   if(node === this.wrap) {
+      //     return true;
+      //   }
+      // }, true );
+      // const endfilterNode = domUtils.findParent(lastRange.endContainer, node => {
+      //   if(node === this.wrap) {
+      //     return true;
+      //   }
+      // }, true );
+      // if(startfilterNode && endfilterNode) {
+      //   //正常范围选择
+      // } else if(!startfilterNode && !endfilterNode) {
+      //   //开始结束都不在正常范围内
+      //   // const startNextNode = domUtils.getNextDomNode(firstRange.startContainer, true, node => {
+      //   //   if(node === this.wrap) {
+      //   //     return true;
+      //   //   }
+      //   // });
+      //   // console.log(startNextNode);
+
+
+      //   // console.log(domUtils.getPosition(firstRange.startContainer, this.wrap))
+      // } else if(startfilterNode) {
+      //   //开始在正常范围内
+      // } else if(endfilterNode) {
+      //   //结束在正常范围内
+      // }
+
+      // if(!domUtils.inDoc(firstRange.startContainer, this.wrap) && !domUtils.inDoc(lastRange.endContainer, this.wrap)) { // 未选中规定区域内的文本
+      //   console.log('未选中规定区域内的文本')
+      //   //不进行任何处理
+      // } else if(!domUtils.inDoc(firstRange.startContainer, this.wrap)) { //开始不在规定区域内
+      //   console.log('开始不在规定区域内')
+      // } else if(!domUtils.inDoc(lastRange.endContainer, this.wrap)) { //结束不在规定区域内
+      //   console.log('结束不在规定区域内')
+      // } else { //正常操作，开始结束都在规定区域内
+      //   console.log('正常操作，开始结束都在规定区域内')
+      // }
     }
   }
 

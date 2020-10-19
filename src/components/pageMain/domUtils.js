@@ -513,7 +513,7 @@ var domUtils = ({
      * ```
      */
   isBookmarkNode: function (node) {
-    return node.nodeType == 1 && node.id && /^_baidu_bookmark_/i.test(node.id);
+    return node.nodeType == 1 && node.id && /^_jinjj_bookmark_/i.test(node.id);
   },
   /**
      * 清除node节点左右连续为空的兄弟inline节点
