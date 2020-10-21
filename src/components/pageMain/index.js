@@ -134,6 +134,40 @@ class MarkText {
     console.log(arr);
   }
 
+  limitRange(firstRange, lastRange, callback) {
+    const startPosition = domUtils.getPosition(firstRange.startContainer, this.wrap);
+    const endPosition = domUtils.getPosition(lastRange.endContainer, this.wrap);
+
+    if(startPosition === 2 || endPosition === 4) { // 未选中标记范围
+      callback({
+        flag: 0,
+        code: 1,
+        msg: '未选中标记范围',
+      });
+    } else if(startPosition === 10 && endPosition === 10) {
+      callback({
+        flag: 1,
+      });
+    } else if(startPosition === 4 && endPosition === 10) { // 开始不在标注范围内
+      callback({
+        flag: 0,
+        code: 3,
+        msg: '开始不在标注范围内',
+      });
+    } else if(startPosition === 10 && endPosition === 2) { // 结束不在标注范围内
+      callback({
+        flag: 0,
+        code: 4,
+        msg: '结束不在标注范围内',
+      });
+    } else if(startPosition === 4 && endPosition === 2) { // 开始结束范围超过了标注范围
+      callback({
+        flag: 0,
+        code: 2,
+        msg: '开始结束范围超过了标注范围',
+      });
+    }
+  }
 
   select(callback) {
     const range = new Range(this.wrap);
@@ -142,48 +176,21 @@ class MarkText {
     if (sel && sel.rangeCount) {
       const firstRange = sel.getRangeAt(0);
       const lastRange = sel.getRangeAt(sel.rangeCount - 1);
+
+      this.limitRange(firstRange, lastRange, data => {
+        if(data.flag) {
+          range.setStart(firstRange.startContainer, firstRange.startOffset).setEnd(lastRange.endContainer, lastRange.endOffset);
+          range.applyInlineStyle('i', {
+            class: this.className
+          }, '', (data) => {
+            this.addArr(data, true);
+          });
+          range.select();
+        } else {
+          callback && callback(data);
+        }
+      });
       
-      const startPosition = domUtils.getPosition(firstRange.startContainer, this.wrap);
-      const endPosition = domUtils.getPosition(lastRange.endContainer, this.wrap);
-
-      if(startPosition === 2 || endPosition === 4) { // 未选中标记范围
-        callback({
-          flag: 0,
-          code: 1,
-          msg: '未选中标记范围',
-        });
-      } else if(startPosition === 10 && endPosition === 10) {
-        callback({
-          flag: 1,
-        });
-        range.setStart(firstRange.startContainer, firstRange.startOffset).setEnd(lastRange.endContainer, lastRange.endOffset);
-        range.applyInlineStyle('i', {
-          class: this.className
-        }, '', (data) => {
-          this.addArr(data, true);
-        });
-        range.select();
-      } else if(startPosition === 4 && endPosition === 10) { // 开始不在标注范围内
-        callback({
-          flag: 0,
-          code: 3,
-          msg: '开始不在标注范围内',
-        });
-      } else if(startPosition === 10 && endPosition === 2) { // 结束不在标注范围内
-        callback({
-          flag: 0,
-          code: 4,
-          msg: '结束不在标注范围内',
-        });
-      } else if(startPosition === 4 && endPosition === 2) { // 开始结束范围超过了标注范围
-        callback({
-          flag: 0,
-          code: 2,
-          msg: '开始结束范围超过了标注范围',
-        });
-      }
-      return;
-
       // const startfilterNode = domUtils.findParent(firstRange.startContainer, node => {
       //   if(node === this.wrap) {
       //     return true;
@@ -233,12 +240,18 @@ class MarkText {
     if (sel && sel.rangeCount) {
       var firstRange = sel.getRangeAt(0);
       var lastRange = sel.getRangeAt(sel.rangeCount - 1);
-      range.setStart(firstRange.startContainer, firstRange.startOffset)
-        .setEnd(lastRange.endContainer, lastRange.endOffset);
-      range.removeInlineStyle('i', this.className, (data) => {
-        this.addArr(data, false);
+
+      this.limitRange(firstRange, lastRange, data => {
+        if(data.flag) {
+          range.setStart(firstRange.startContainer, firstRange.startOffset).setEnd(lastRange.endContainer, lastRange.endOffset);
+          range.removeInlineStyle('i', this.className, (data) => {
+            this.addArr(data, false);
+          });
+          range.select();
+        } else {
+          callback && callback(data);
+        }
       });
-      range.select();
     } else {
       alert('请选择标记文字！')
     }

@@ -2,6 +2,8 @@ import React from 'react';
 import MarkText from './pageMain';
 import './index.css';
 
+const html = 'Baby Baby 对你的钟爱\n\n就要就要把你给宠坏'
+
 /**
  * 首页
  */
@@ -75,6 +77,7 @@ class PageMain extends React.Component {
     通过互联网服务提升人类生活品质是腾讯的使命。目前，腾讯把为用户提供“一站式在线生活服务”作为战略目标，提供互联网增值服务、网络广告服务和电子商务服务。通过即时通信工具<span style={{background: '#f00'}}>QQ</span>、移动社交和通信<span style={{background: '#f00'}}>服务微信和WeChat</span>、门户网站腾讯网（<span style={{background: '#f00'}}>QQ.com</span></span>
           </span>
           <span>nononono</span>
+          <p><span dangerouslySetInnerHTML={{ __html: html }}></span></p>
         </div>
         <div>
           <div className="btns">
