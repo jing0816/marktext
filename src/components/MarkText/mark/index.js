@@ -248,13 +248,17 @@ class MarkText {
             this.addArr(data, false);
           });
           range.select();
-        } else {
-          callback && callback(data);
         }
       });
     } else {
       alert('请选择标记文字！')
     }
+  }
+
+  clear() {
+    const range = new Range(this.wrap);
+    range.clear(this.wrap.querySelectorAll(`.${this.className}`))
+    this.data = [];
   }
 }
 

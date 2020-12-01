@@ -1096,6 +1096,14 @@ Range.prototype = {
       content: bookmark.content,
     });
   },
+  clear: function(dom) { // jing
+    [].forEach.call(dom, el => {
+      domUtils.remove(el, true);
+    });
+    setTimeout(() => {
+      window.getSelection().removeAllRanges();
+    });
+  },
   getClosedNode: function () {
     var node;
     if (!this.collapsed) {
