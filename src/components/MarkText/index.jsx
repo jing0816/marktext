@@ -68,13 +68,14 @@ class MarkText extends React.Component {
   handleCancel = () => {
     if(this.mark) {
       this.mark.cancel();
+      this.props.onChange && this.props.onChange(this.mark.data);
     }
     this.setState({
       style: {
         display: 'none',
       }
     });
-    this.props.onChange && this.props.onChange(this.mark.data);
+    
   }
 
   // 按钮必须是button，不能是a
